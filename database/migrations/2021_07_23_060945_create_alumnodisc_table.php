@@ -15,13 +15,13 @@ class CreateAlumnodiscTable extends Migration
     {
         Schema::create('alumnodisc', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('alumnoId');
-            $table->unsignedBigInteger('discapacidadId');
+            $table->unsignedBigInteger('alumno_id');
+            $table->unsignedBigInteger('discapacidad_id');
             $table->timestamps();
         });
         Schema::table('alumnodisc', function (Blueprint $table) {
-            $table->foreign('alumnoId')->references('id')->on('alumno');
-            $table->foreign('discapacidadId')->references('id')->on('discapacidad');
+            $table->foreign('alumno_id')->references('id')->on('alumno')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('discapacidad_id')->references('id')->on('discapacidad') ->onDelete('cascade')->onUpdate('cascade');
             
         });
     }

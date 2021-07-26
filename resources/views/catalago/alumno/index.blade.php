@@ -28,7 +28,8 @@
             <th>Municipio</th>
             <th>Estado</th>
             <th>Fecha nacimiento</th>
-            <th width="200px">Foto</th>
+            <th width="150px">Foto</th>
+            <th>Discapacidad</th>
             <th width="280px">Acciones</th>
         </tr>
         @foreach ($alumnos as $alumno)
@@ -41,14 +42,15 @@
             <td>{{ $alumno->nommuni}}</td>
             <td>{{ $alumno->nomestado}}</td>
             <td>{{ $alumno->fechaNacimiento}}</td>
-            <td><img src="{{ $alumno->path }}" alt="image" width="200px"></td>
+            <td><img src="{{ $alumno->path }}" alt="image" width="150px"></td>
+            <td>{{$alumno->nombrediscapacidad}}</td>
             <td>
                 <form action="{{ route('alumno.destroy',$alumno->idlum) }}" method="POST"> 
                    
-                    <a class="btn btn-primary" href="{{ route('alumno.edit',$alumno->idlum) }}">Edit</a>
+                    <a class="btn btn-primary" href="{{ route('alumno.edit',$alumno->idlum) }}">Editar</a>
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
                 </form>
             </td>
         </tr>

@@ -22,11 +22,17 @@ class AlumnoController extends Controller
     {
         //
         $alumnos = Alumno::select([
-            'alumno.id as idlum','matricula','nombre','apaterno','amaterno','curp','estadocivil.nEstadoCivil as estadocivil','direccion','colonia','municipio.nombreMunicipio as nommuni','estado.nomestado as nomestado','fechaNacimiento','path'
+            'alumno.id as idlum','matricula','nombre','apaterno','amaterno','curp','estadocivil.nEstadoCivil as estadocivil','direccion','colonia','municipio.nombreMunicipio as nommuni','estado.nomestado as nomestado',
+            'fechaNacimiento','path'
         ])
         ->join('estadocivil','alumno.estadocivilId','=','estadocivil.id')
         ->join('municipio','alumno.municipioId','=','municipio.id')
         ->join('estado','alumno.estadoId','=','estado.id')
+        ->leftjoin('alumno_discapacidad','alumno.id','=','alumno_discapacidad.alumno_id')
+        ->leftjoin('discapacidad','alumno_discapacidad.discapacidad_id','=','discapacidad.id')
+        ->SelectRaw('GROUP_CONCAT(discapacidad.nomdiscapacidad) as nombrediscapacidad')
+        ->groupBy('alumno.id')
+        ->OrderBy('alumno.id')
         ->get();
         return view('catalago.alumno.index', compact('alumnos'));
     }
@@ -46,6 +52,7 @@ class AlumnoController extends Controller
         $comboestacivil = EstadoCivil::select('id','nEstadoCivil')
         ->get();
         $checkdisca = Discapacidad::select('id','nomdiscapacidad')
+        
         ->get();
         return view('catalago.alumno.create',compact('combomuni','comboestado','comboestacivil','checkdisca'));   
     }
@@ -76,6 +83,8 @@ class AlumnoController extends Controller
         ]);
         if($request->disca){
             $alumno->discapacidad()->attach($request->disca);
+          }else{
+              
           }
         return redirect()->route('alumno.index')->with('success','Se agrego Correctamente');
     }
@@ -121,8 +130,9 @@ class AlumnoController extends Controller
     {
         $image = $request->file('foto')->store('public/image');
         $url = Storage::url($image);
-        $alumno->update([
-        'matricula' => $request->matricula,
+        
+       $alumno->update([
+       'matricula' => $request->matricula,
         'nombre' => $request->nombre,
         'apaterno' => $request->apaterno,
         'amaterno' => $request->amaterno,
@@ -136,7 +146,9 @@ class AlumnoController extends Controller
         'path' => $url
     ]);
     if($request->disca){
-        $alumno->discapacidad()->attach($request->disca);
+        $alumno->discapacidad()->sync($request->disca);
+      }else{
+         
       }
       return redirect()->route('alumno.index')->with('success','Actualización correcta');
     }

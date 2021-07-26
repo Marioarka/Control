@@ -92,6 +92,7 @@
                 </div>
             </div>
             <div class="form-group">
+                <input type="hidden" value="6" name="disca[]">
                 <label>Discapacidad:</label>
                 @foreach($checkdisca as $check)
                 <input type="checkbox" class="form-control" name="disca[]" value="{{ $check->id}}">{{ $check->nomdiscapacidad}}<br>

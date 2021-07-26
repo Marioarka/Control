@@ -22,7 +22,7 @@
         </div>
     @endif
   
-    <form action="{{ route('alumno.update',$alumno->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('alumno.update',$alumno->id) }}" method="Post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
    
@@ -87,12 +87,16 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <strong>Foto:</strong>
-                        <input type="file" class="form-control" value="{{$alumno->path}}"  name="foto" placeholder="Foto" accept="image/*">
+                        @if($alumno->path)
+                        <input type="file" class="form-control" value="{{Storage::url($alumno->path)}}"  name="foto" placeholder="Foto" accept="image/*">
+                        @else
+                        <input type="file" class="form-control" value="{{Storage::url($alumno->path)}}"  name="foto" placeholder="Foto" accept="image/*">
+                        @endif
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Discapacidad:</label>
-                    
+                   
                     @foreach($checkdisca as $check)
                     <input type="checkbox" class="form-control" name="disca[]" value="{{ $check->id}}">{{ $check->nomdiscapacidad}}<br>
                     @endforeach
